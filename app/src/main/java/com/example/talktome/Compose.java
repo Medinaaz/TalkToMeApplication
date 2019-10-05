@@ -3,6 +3,7 @@ package com.example.talktome;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Compose extends AppCompatActivity {
     private TextToSpeech mTTS;
@@ -114,9 +117,24 @@ public class Compose extends AppCompatActivity {
                             break;
                         case "Say send in order to send the email":
                             if(result.get(0).equals("send")){
-                                sendEmail(receiverEmailEditText.getText().toString().trim(),
-                                        subjectEditText.getText().toString().trim(),
-                                        contentEmailEditText.getText().toString().trim());
+                                Email newEmail = new Email(receiverEmailEditText.getText().toString(),
+                                        subjectEditText.getText().toString(),
+                                        contentEmailEditText.getText().toString(),
+                                        "sender");
+
+                                SharedPreferences mPrefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
+                                SharedPreferences.Editor prefsEditor = mPrefs.edit();
+
+                                String emailJson = new String();
+                                ObjectMapper mapper = new ObjectMapper();
+                                try {
+                                    emailJson = mapper.writeValueAsString(newEmail);
+                                } catch (JsonProcessingException e) {
+                                    e.printStackTrace();
+                                }
+                                prefsEditor.putString("email", emailJson);
+                                prefsEditor.apply();
+
                             }
                     }
                 }

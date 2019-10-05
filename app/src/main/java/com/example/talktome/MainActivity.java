@@ -101,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
                             mTTS.speak("Now opening inbox", TextToSpeech.QUEUE_FLUSH, null, "messageID");
                             break;
                         case "sent email":
-                            mTTS.speak("Now opening sent email", TextToSpeech.QUEUE_FLUSH, null, "messageID");
+                            Intent intentToSent = new Intent(getApplicationContext(), SentList.class);
+                            startActivity(intentToSent);
                             break;
                         case "compose an email":
                             Intent intentToCompose = new Intent(getApplicationContext(), Compose.class);
