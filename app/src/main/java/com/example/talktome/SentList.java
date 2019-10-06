@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+
 public class SentList extends AppCompatActivity {
     private ListView sentEmails;
     private TextToSpeech mTTS;
@@ -55,6 +58,7 @@ public class SentList extends AppCompatActivity {
             }
         });
 
+        /*
         Email readEmail = new Email("","","","");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -68,13 +72,32 @@ public class SentList extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+        */
 
         List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 
+        String host = "pop.gmail.com";// change accordingly
+        String mailStoreType = "pop3";
+        String username = "yakuphanbilgic@gmail.com";// change accordingly
+        String password = "kosvkeonriszprry";// change accordingly
+
+        GetEmails getEmails = new GetEmails();
+
+        Message[] messages = getEmails.check(host, mailStoreType, username, password);
+
         Map<String, String> datum = new HashMap<String, String>(2);
-        datum.put("First Line", readEmail.getSubject());
-        datum.put("Second Line",readEmail.getContent());
-        data.add(datum);
+        try{
+            datum.put("First Line", messages[0].getSubject());
+            datum.put("Second Line",messages[0].getContent().toString());
+            Toast.makeText(getApplicationContext(), messages[0].getSubject(), Toast.LENGTH_LONG).show();
+            data.add(datum);
+        }
+        catch (MessagingException m){
+            Toast.makeText(getApplicationContext(), m.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        catch (IOException i){
+            Toast.makeText(getApplicationContext(), i.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
         SimpleAdapter adapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2, new String[] {"First Line", "Second Line" },
                 new int[] {android.R.id.text1, android.R.id.text2 });

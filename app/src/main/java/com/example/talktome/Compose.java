@@ -98,8 +98,8 @@ public class Compose extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                    SendEmailTLS sendEmailTLS = new SendEmailTLS();
-                    Toast.makeText(getApplicationContext(), sendEmailTLS.sendEmail(), Toast.LENGTH_LONG).show();
+                   // SendEmailTLS sendEmailTLS = new SendEmailTLS();
+                   // Toast.makeText(getApplicationContext(), sendEmailTLS.sendEmail(), Toast.LENGTH_LONG).show();
 
                     /*switch (speechText) {
                         case "Compose page is opened, say email address of the receiver":

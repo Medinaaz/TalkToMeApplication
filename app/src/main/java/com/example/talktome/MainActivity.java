@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                    Intent intentToCompose = new Intent(getApplicationContext(), Compose.class);
+                    Intent intentToCompose = new Intent(getApplicationContext(), SentList.class);
                     startActivity(intentToCompose);
 
                     /*switch(result.get(0)){
