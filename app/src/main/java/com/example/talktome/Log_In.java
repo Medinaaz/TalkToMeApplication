@@ -2,37 +2,46 @@ package com.example.talktome;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-import static java.lang.System.exit;
+public class Log_In extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
     private TextToSpeech mTTS;
-    private TextView mTextTv;
-    private ImageButton mVoiceBtn;
     private String speechText;
+    private EditText SenderEmailEditText;
+    private EditText PasswordEmailText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_log__in);
+
+        SenderEmailEditText = findViewById(R.id.editSenderText);
+        PasswordEmailText = findViewById(R.id.editPasswordText);
 
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
-                    int result = mTTS.setLanguage(Locale.UK);
+                    int result = mTTS.setLanguage(Locale.US);
 
                     //I skipped the log in part.
                     ttsInitialized();
@@ -45,25 +54,28 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
-
-    private void ttsInitialized(){
+    private void ttsInitialized() {
         mTTS.setOnUtteranceProgressListener(new UtteranceProgressListener() {
             @Override
-            public void onStart(String s) {}
-            @Override
-            public void onDone(String s) {listen(); }
-            @Override
-            public void onError(String s) {}
-        });
+            public void onStart(String s) {
+            }
 
-        speechText = "Welcome to email client. Menu options are inbox, sent email and Compose an email.";
+            @Override
+            public void onDone(String s) {
+                listen();
+            }
+
+            @Override
+            public void onError(String s) {
+            }
+        });
+        speechText = "Log in page is opened, say your email address";
 
         HashMap<String, String> map = new HashMap<>();
-        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "messageID");
+        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "messageID1");
 
-        mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID");
+        mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
     }
 
     private void listen(){
@@ -71,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"en");
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Select one of the options");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hi speak something");
 
         //start intent
         try{
@@ -87,36 +99,44 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode){
             case 1000:{
                 //get text array from voice intent
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-                    Intent intentToCompose = new Intent(getApplicationContext(), Compose.class);
-                    startActivity(intentToCompose);
-
-                    /*switch(result.get(0)){
-                        case "inbox":
-                            mTTS.speak("Now opening inbox", TextToSpeech.QUEUE_FLUSH, null, "messageID");
+                    switch (speechText) {
+                        case "Log in page is opened, say your email address":
+                            /*SenderEmailEditText.setText("yakuphanbilgic@gmail.com");
+                            speechText = "Say your password";
+                            mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
+                            */
+                            Intent intentToLogIn = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intentToLogIn);
                             break;
-                        case "sent email":
-                            Intent intentToSent = new Intent(getApplicationContext(), SentList.class);
-                            startActivity(intentToSent);
+                        case "Say your password":
+                            PasswordEmailText.setText(result.get(0));
+                            speechText = "Say login in order to log in to the app";
+                            mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
-                        case "compose an email":
-                            Intent intentToCompose = new Intent(getApplicationContext(), Compose.class);
-                            startActivity(intentToCompose);
-                            break;
-                        case "exit":
-                            exit(0);
+                        case "Say login in order to log in to the app":
+                            if(result.get(0).equals("login") || result.get(0).equals("log in")){
+                                Toast.makeText(this, "you said login", Toast.LENGTH_LONG).show();
+                               // Intent intentToLogIn = new Intent(getApplicationContext(), MainActivity.class);
+                               // startActivity(intentToLogIn);
+                                break;
+                            }else{
+                                Toast.makeText(this, "you couldn't say login, you said " + result.get(0),Toast.LENGTH_LONG).show();
+                            }
                         default:
                             break;
-                    }*/
+                    }
                 }
                 break;
             }
         }
     }
 }
+
+
+
+

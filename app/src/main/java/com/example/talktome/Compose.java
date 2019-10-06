@@ -40,7 +40,6 @@ public class Compose extends AppCompatActivity {
                 if (status == TextToSpeech.SUCCESS) {
                     int result = mTTS.setLanguage(Locale.UK);
 
-                    //I skipped the log in part.
                     ttsInitialized();
 
                     if (result == TextToSpeech.LANG_MISSING_DATA|| result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -51,7 +50,6 @@ public class Compose extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void ttsInitialized(){
@@ -99,7 +97,11 @@ public class Compose extends AppCompatActivity {
                 //get text array from voice intent
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    switch (speechText) {
+
+                    SendEmailTLS sendEmailTLS = new SendEmailTLS();
+                    Toast.makeText(getApplicationContext(), sendEmailTLS.sendEmail(), Toast.LENGTH_LONG).show();
+
+                    /*switch (speechText) {
                         case "Compose page is opened, say email address of the receiver":
                             receiverEmailEditText.setText("yakuphanbilgic@gmail.com");
                             speechText = "Say subject of the email";
@@ -115,12 +117,15 @@ public class Compose extends AppCompatActivity {
                             speechText = "Say send in order to send the email";
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
-                        case "Say send in order to send the email":
-                            if(result.get(0).equals("send")){
+                        case "Say send in order to send the email and back to go back":
+                            if(result.get(0).equals("go")){
                                 Email newEmail = new Email(receiverEmailEditText.getText().toString(),
                                         subjectEditText.getText().toString(),
                                         contentEmailEditText.getText().toString(),
                                         "sender");
+
+                                SendEmailTLS sendEmailTLS = new SendEmailTLS();
+                                sendEmailTLS.sendEmail();
 
                                 SharedPreferences mPrefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
                                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
@@ -135,8 +140,14 @@ public class Compose extends AppCompatActivity {
                                 prefsEditor.putString("email", emailJson);
                                 prefsEditor.apply();
 
+                                Intent intentToMain = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intentToMain);
                             }
-                    }
+                            else if(result.get(0).equals("back")){
+                                Intent intentToMain = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intentToMain);
+                            }
+                    }*/
                 }
                 break;
             }

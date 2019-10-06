@@ -1,6 +1,8 @@
 package com.example.talktome;
 
 public class Email {
+    protected Email(){};
+
     protected Email(String receiver, String subject, String content, String sender){
         this.receiver = receiver;
         this.subject = subject;
