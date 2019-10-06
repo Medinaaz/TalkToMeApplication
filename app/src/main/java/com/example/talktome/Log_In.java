@@ -117,7 +117,7 @@ public class Log_In extends AppCompatActivity {
                             break;
                         case "Say login in order to log in to the app":
                             if(result.get(0).equals("login") || result.get(0).equals("log in")){
-                                Intent intentToLogIn = new Intent(getApplicationContext(), MainActivity.class);
+                                Intent intentToLogIn = new Intent(getApplicationContext(), SentList.class);
                                 startActivity(intentToLogIn);
                                 break;
                             } else{

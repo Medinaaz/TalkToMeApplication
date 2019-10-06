@@ -2,21 +2,17 @@ package com.example.talktome;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.common.api.Result;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -76,27 +73,27 @@ public class SentList extends AppCompatActivity {
 
         List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 
-        String host = "pop.gmail.com";// change accordingly
-        String mailStoreType = "pop3";
-        String username = "emailclientproject1@gmail.com";// change accordingly
-        String password = "computerproject1";// change accordingly
-
-        GetEmails getEmails = new GetEmails();
-
         Map<String, String> datum = new HashMap<String, String>(2);
         try{
-            Message[] messages = getEmails.doit();
+            GetEmails getEmails = new GetEmails();
+            Message [] email = getEmails.execute(new String[] {"alueda"}).get();
 
-            datum.put("First Line", messages[0].getSubject());
-            datum.put("Second Line",messages[0].getContent().toString());
-            Toast.makeText(getApplicationContext(), messages[0].getSubject(), Toast.LENGTH_LONG).show();
+            datum.put("First Line", email[0].getSubject());
+            datum.put("Second Line",email[0].getContent().toString());
+            Toast.makeText(getApplicationContext(), email[0].getSubject(), Toast.LENGTH_LONG).show();
             data.add(datum);
         }
         catch (MessagingException m){
-            Toast.makeText(getApplicationContext(), "YAKUP " + m.getMessage(), Toast.LENGTH_LONG).show();
+            m.printStackTrace();
         }
         catch (IOException i){
-            Toast.makeText(getApplicationContext(), "MEDINA" + i.getMessage(), Toast.LENGTH_LONG).show();
+            i.printStackTrace();
+        }
+        catch (ExecutionException ee){
+            ee.printStackTrace();
+        }
+        catch(InterruptedException ie){
+            ie.printStackTrace();
         }
 
         SimpleAdapter adapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2, new String[] {"First Line", "Second Line" },
