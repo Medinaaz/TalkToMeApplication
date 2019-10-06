@@ -98,10 +98,11 @@ public class Compose extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                   // SendEmailTLS sendEmailTLS = new SendEmailTLS();
-                   // Toast.makeText(getApplicationContext(), sendEmailTLS.sendEmail(), Toast.LENGTH_LONG).show();
+                    /*SendEmailTLS sendEmailTLS = new SendEmailTLS();
+                    Toast.makeText(getApplicationContext(), sendEmailTLS.sendEmail("mySubject", "myContent", "emailclientproject1@gmail.com", "emailclientproject1@gmail.com"), Toast.LENGTH_LONG).show();
+                    */
 
-                    /*switch (speechText) {
+                    switch (speechText) {
                         case "Compose page is opened, say email address of the receiver":
                             receiverEmailEditText.setText("yakuphanbilgic@gmail.com");
                             speechText = "Say subject of the email";
@@ -125,7 +126,7 @@ public class Compose extends AppCompatActivity {
                                         "sender");
 
                                 SendEmailTLS sendEmailTLS = new SendEmailTLS();
-                                sendEmailTLS.sendEmail();
+                                //sendEmailTLS.sendEmail();
 
                                 SharedPreferences mPrefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
                                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
@@ -147,7 +148,7 @@ public class Compose extends AppCompatActivity {
                                 Intent intentToMain = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intentToMain);
                             }
-                    }*/
+                    }
                 }
                 break;
             }

@@ -78,25 +78,25 @@ public class SentList extends AppCompatActivity {
 
         String host = "pop.gmail.com";// change accordingly
         String mailStoreType = "pop3";
-        String username = "yakuphanbilgic@gmail.com";// change accordingly
-        String password = "kosvkeonriszprry";// change accordingly
+        String username = "emailclientproject1@gmail.com";// change accordingly
+        String password = "computerproject1";// change accordingly
 
         GetEmails getEmails = new GetEmails();
 
-        Message[] messages = getEmails.check(host, mailStoreType, username, password);
-
         Map<String, String> datum = new HashMap<String, String>(2);
         try{
+            Message[] messages = getEmails.doit();
+
             datum.put("First Line", messages[0].getSubject());
             datum.put("Second Line",messages[0].getContent().toString());
             Toast.makeText(getApplicationContext(), messages[0].getSubject(), Toast.LENGTH_LONG).show();
             data.add(datum);
         }
         catch (MessagingException m){
-            Toast.makeText(getApplicationContext(), m.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "YAKUP " + m.getMessage(), Toast.LENGTH_LONG).show();
         }
         catch (IOException i){
-            Toast.makeText(getApplicationContext(), i.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "MEDINA" + i.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         SimpleAdapter adapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2, new String[] {"First Line", "Second Line" },

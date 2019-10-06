@@ -106,12 +106,9 @@ public class Log_In extends AppCompatActivity {
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     switch (speechText) {
                         case "Log in page is opened, say your email address":
-                            /*SenderEmailEditText.setText("yakuphanbilgic@gmail.com");
+                            SenderEmailEditText.setText("yakuphanbilgic@gmail.com");
                             speechText = "Say your password";
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
-                            */
-                            Intent intentToLogIn = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intentToLogIn);
                             break;
                         case "Say your password":
                             PasswordEmailText.setText(result.get(0));
@@ -120,11 +117,10 @@ public class Log_In extends AppCompatActivity {
                             break;
                         case "Say login in order to log in to the app":
                             if(result.get(0).equals("login") || result.get(0).equals("log in")){
-                                Toast.makeText(this, "you said login", Toast.LENGTH_LONG).show();
-                               // Intent intentToLogIn = new Intent(getApplicationContext(), MainActivity.class);
-                               // startActivity(intentToLogIn);
+                                Intent intentToLogIn = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intentToLogIn);
                                 break;
-                            }else{
+                            } else{
                                 Toast.makeText(this, "you couldn't say login, you said " + result.get(0),Toast.LENGTH_LONG).show();
                             }
                         default:

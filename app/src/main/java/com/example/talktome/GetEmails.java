@@ -1,35 +1,49 @@
 package com.example.talktome;
 
-import java.util.Properties;
+import android.widget.Toast;
 
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.Session;
-import javax.mail.Store;
+import java.io.*;
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
 
 public class GetEmails {
 
-    private Message[] messages;
+    public GetEmails() {}
+    Message[] messages;
+    //
+    // inspired by :
+    // http://www.mikedesjardins.net/content/2008/03/using-javamail-to-read-and-extract/
+    //
 
-    protected Message[] check(final String host, final String storeType, final String user,
-                              final String password)
-    {
+    public Message[] doit() throws MessagingException, IOException {
+        Folder folder = null;
         try {
-
             //create properties field
             Properties properties = new Properties();
 
-            properties.put("mail.pop3.host", host);
-            properties.put("mail.pop3.port", "995");
+            properties.put("mail.pop3.host", "smtp.gmail.com");
+            properties.put("mail.pop3.port", "587");
             properties.put("mail.pop3.starttls.enable", "true");
             Session emailSession = Session.getDefaultInstance(properties);
 
             //create the POP3 store object and connect with the pop server
             final Store store = emailSession.getStore("pop3s");
 
-            store.connect(host, user, password);
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        store.connect("pop.gmail.com","yakuphanbilgic@gmail.com", "kosvkeonriszprry");
+
+                        while(!store.isConnected()){
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
 
             //create the folder object and open it
             Folder emailFolder = store.getFolder("INBOX");
@@ -38,17 +52,14 @@ public class GetEmails {
             // retrieve the messages from the folder in an array and print it
             messages = emailFolder.getMessages();
 
-            //close the store and folder objects
-            emailFolder.close(false);
             store.close();
-
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            return messages;
         }
-        return messages;
+        finally {
+            if (folder != null) { folder.close(true); }
+        }
+    }
+
+    public static void main(String args[]) throws Exception {
     }
 }

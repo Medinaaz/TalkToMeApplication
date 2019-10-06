@@ -94,10 +94,10 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                    Intent intentToCompose = new Intent(getApplicationContext(), SentList.class);
-                    startActivity(intentToCompose);
+                    /*Intent intentToCompose = new Intent(getApplicationContext(), SentList.class);
+                    startActivity(intentToCompose);*/
 
-                    /*switch(result.get(0)){
+                    switch(result.get(0)){
                         case "inbox":
                             mTTS.speak("Now opening inbox", TextToSpeech.QUEUE_FLUSH, null, "messageID");
                             break;
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                             exit(0);
                         default:
                             break;
-                    }*/
+                    }
                 }
                 break;
             }
