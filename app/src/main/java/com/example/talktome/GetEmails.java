@@ -1,66 +1,73 @@
 package com.example.talktome;
 
 import android.os.AsyncTask;
-import java.io.*;
-import java.util.*;
-import javax.mail.*;
 
-public class GetEmails extends AsyncTask<String,Void,Message[]> {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+
+public class GetEmails extends AsyncTask<String,String,String> {
 
     protected GetEmails() {}
 
-    private Message[] messages;
-    //
-    // inspired by :
-    // http://www.mikedesjardins.net/content/2008/03/using-javamail-to-read-and-extract/
-    //
+    private String mails;
 
     @Override
-    protected Message[] doInBackground(String... urls) {
-        Folder folder = null;
+    protected String doInBackground(String... params) {
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-        //create properties field
-        Properties props = System.getProperties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.setProperty("mail.store.protocol", "imaps");
-        props.setProperty("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.setProperty("mail.imap.socketFactory.fallback", "false");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true"); //TLS
-        props.put("simple-content", "true");
+        String postBody = "{\"userMail\":\"emailclientproject1@gmail.com\",\"userPassword\":\"computerproject1\"}";
 
         try {
-            // open session
-            Session session = Session.getDefaultInstance(props, null);
-            Store store = session.getStore("imaps");
-            store.connect("imap.gmail.com", "yakuphanbilgic@gmail.com", "kosvkeonriszprry");
+            JSONObject obj = new JSONObject(postBody);
+        } catch (Throwable t) {
 
-            String yakup = "alueda";
-
-            // get inbox folder
-            folder = store.getFolder("inbox");
-            folder.open(Folder.READ_ONLY);
-
-            // retrieve the messages from the folder in an array and print it
-            messages = folder.getMessages();
-
-            return messages;
-        }
-        catch (MessagingException m){
-            m.printStackTrace();
         }
 
-        return messages;
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://seemailbackendserver.appspot.com/getEmails")
+                .post(RequestBody.create(JSON, postBody))
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            String resStr = response.body().string().toString();
+            JSONObject json = new JSONObject(resStr);
+            mails = json.get("mails").toString();
+            int length = mails.length();
+        }
+        catch (JSONException je){
+            je.printStackTrace();
+        }
+        catch (IOException io){
+            io.printStackTrace();
+        }
+        return mails;
     }
 
     @Override
-    protected void onPostExecute(Message[] result) {
-
+    protected void onPostExecute(String result) {
+        returnEmails();
     }
 
-    public Message[] returnEmails(){
-        return messages;
+    public String returnEmails(){
+        return mails;
     }
 
 }

@@ -14,8 +14,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.Result;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -55,45 +58,27 @@ public class SentList extends AppCompatActivity {
             }
         });
 
-        /*
-        Email readEmail = new Email("","","","");
 
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            SharedPreferences mPrefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
-            String json = mPrefs.getString("email", "");
-            Toast.makeText(getApplicationContext(), json, Toast.LENGTH_LONG).show();
-            readEmail = mapper.readValue(json, Email.class);
-            Toast.makeText(getApplicationContext(), readEmail.getContent(), Toast.LENGTH_LONG).show();
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-        */
+        List<Map<String, String>> data = new ArrayList<>(5);
 
-        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-
-        Map<String, String> datum = new HashMap<String, String>(2);
         try{
             GetEmails getEmails = new GetEmails();
-            Message [] email = getEmails.execute(new String[] {"alueda"}).get();
+            JSONObject obj1 = new JSONObject();
+            obj1.put("userMail", "emailclientproject1@gmail.com");
+            obj1.put("userPassword", "computerproject1");
+            String allMails = getEmails.execute("yakup").get();
 
-            datum.put("First Line", email[0].getSubject());
-            datum.put("Second Line",email[0].getContent().toString());
-            Toast.makeText(getApplicationContext(), email[0].getSubject(), Toast.LENGTH_LONG).show();
-            data.add(datum);
+            List<String> allMailsList = Arrays.asList(allMails.split(",[ ]*"));
+
+            for(int i = 0; i < allMailsList.size(); i++){
+                Map<String, String> datum = new HashMap<String, String>(2);
+                datum.put("First Line", allMailsList.get(i));
+                datum.put("Second Line",allMailsList.get(i));
+                data.add(i, datum);
+            }
         }
-        catch (MessagingException m){
-            m.printStackTrace();
-        }
-        catch (IOException i){
-            i.printStackTrace();
-        }
-        catch (ExecutionException ee){
-            ee.printStackTrace();
-        }
-        catch(InterruptedException ie){
-            ie.printStackTrace();
+        catch (Exception e){
+            e.printStackTrace();
         }
 
         SimpleAdapter adapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2, new String[] {"First Line", "Second Line" },
