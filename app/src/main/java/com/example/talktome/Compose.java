@@ -115,31 +115,26 @@ public class Compose extends AppCompatActivity {
                             break;
                         case "Say content of the email":
                             contentEmailEditText.setText(result.get(0));
-                            speechText = "Say send in order to send the email";
+                            speechText = "Say send in order to send the email and back to go back";
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
                         case "Say send in order to send the email and back to go back":
-                            if(result.get(0).equals("go")){
-                                Email newEmail = new Email(receiverEmailEditText.getText().toString(),
-                                        subjectEditText.getText().toString(),
-                                        contentEmailEditText.getText().toString(),
-                                        "sender");
+                            if(result.get(0).equals("send")){
+                                try{
+                                    GetEmails getEmails = new GetEmails();
 
-                                SendEmailTLS sendEmailTLS = new SendEmailTLS();
-                                //sendEmailTLS.sendEmail();
+                                    String[] parameters = {"compose",
+                                            receiverEmailEditText.getText().toString(),
+                                            subjectEditText.getText().toString(),
+                                            contentEmailEditText.getText().toString()
+                                    };
 
-                                SharedPreferences mPrefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                                    String allMails = getEmails.execute(parameters).get();
 
-                                String emailJson = new String();
-                                ObjectMapper mapper = new ObjectMapper();
-                                try {
-                                    emailJson = mapper.writeValueAsString(newEmail);
-                                } catch (JsonProcessingException e) {
+
+                                } catch (Exception e){
                                     e.printStackTrace();
                                 }
-                                prefsEditor.putString("email", emailJson);
-                                prefsEditor.apply();
 
                                 Intent intentToMain = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intentToMain);

@@ -1,7 +1,5 @@
 package com.example.talktome;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -11,7 +9,12 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class SentList extends AppCompatActivity {
+public class Inbox extends AppCompatActivity {
     private ListView sentEmails;
     private TextToSpeech mTTS;
     private String speechText;
@@ -58,17 +61,22 @@ public class SentList extends AppCompatActivity {
 
         try{
             GetEmails getEmails = new GetEmails();
-            String allMails = getEmails.execute("sent").get();
+            String allMails = getEmails.execute("inbox").get();
 
             JSONObject json = new JSONObject(allMails);
             String mails = json.get("contents").toString();
             String from = json.get("from").toString();
             String subjects = json.get("subjects").toString();
 
-            mailsList = Arrays.asList(mails.split("[ ]*"));
-            fromList = Arrays.asList(from.split("[ ]*"));
+            mailsList = Arrays.asList(mails.split(",[ ]*"));
+            fromList = Arrays.asList(from.split(",[ ]*"));
             subjectsList = Arrays.asList(subjects.split(",[ ]*"));
             //",[ ]*"
+            fromList.set(0, fromList.get(0).replace("[", ""));
+            fromList.set(fromList.size() - 1, fromList.get(fromList.size() - 1).replace("]", ""));
+
+            subjectsList.set(0, subjectsList.get(0).replace("[", ""));
+            subjectsList.set(subjectsList.size() - 1, subjectsList.get(subjectsList.size() - 1).replace("]", ""));
 
             for(int i = 0; i < mailsList.size(); i++){
                 Map<String, String> datum = new HashMap<String, String>(2);
@@ -97,7 +105,7 @@ public class SentList extends AppCompatActivity {
             public void onError(String s) {}
         });
 
-        speechText = "Sent emails list is opened, say email and a number to read the email with that order and say go to go back";
+        speechText = "Inbox is opened, say email and a number to read the email with that order and say go to go back";
 
         HashMap<String, String> map = new HashMap<>();
         map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "messageID2");
@@ -133,7 +141,7 @@ public class SentList extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     switch (speechText) {
-                        case "Sent emails list is opened, say email and a number to read the email with that order and say go to go back":
+                        case "Inbox is opened, say email and a number to read the email with that order and say go to go back":
                             if (result.get(0).equals("back")) {
                                 Intent intentToMain = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intentToMain);

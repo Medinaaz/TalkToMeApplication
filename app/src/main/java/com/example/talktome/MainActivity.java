@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             public void onError(String s) {}
         });
 
-        speechText = "Welcome to email client. Menu options are inbox, sent email and Compose an email.";
+        speechText = "Welcome to email client. Menu options are inbox, sent email and compose an email.";
 
         HashMap<String, String> map = new HashMap<>();
         map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "messageID");
@@ -94,12 +94,10 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                    /*Intent intentToCompose = new Intent(getApplicationContext(), SentList.class);
-                    startActivity(intentToCompose);*/
-
                     switch(result.get(0)){
                         case "inbox":
-                            mTTS.speak("Now opening inbox", TextToSpeech.QUEUE_FLUSH, null, "messageID");
+                            Intent intentToInbox = new Intent(getApplicationContext(), Inbox.class);
+                            startActivity(intentToInbox);
                             break;
                         case "sent email":
                             Intent intentToSent = new Intent(getApplicationContext(), SentList.class);
@@ -112,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
                         case "exit":
                             exit(0);
                         default:
+                            speechText = "Welcome to email client. Menu options are inbox, sent email and compose an email.";
+                            mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID");
                             break;
                     }
                 }

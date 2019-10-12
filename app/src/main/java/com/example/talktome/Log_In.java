@@ -74,6 +74,7 @@ public class Log_In extends AppCompatActivity {
             public void onError(String s) {
             }
         });
+
         speechText = "Log in page is opened, say your email address";
 
         HashMap<String, String> map = new HashMap<>();
@@ -120,8 +121,8 @@ public class Log_In extends AppCompatActivity {
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
                         case "Say login in order to log in to the app":
-                            if(result.get(0).equals("login") || result.get(0).equals("log in")){
-                                Intent intentToLogIn = new Intent(getApplicationContext(), SentList.class);
+                            if(!result.get(0).equals("login") || !result.get(0).equals("log in")){
+                                Intent intentToLogIn = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intentToLogIn);
                                 break;
                             } else{
