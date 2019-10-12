@@ -41,6 +41,10 @@ public class Log_In extends AppCompatActivity {
         SenderEmailEditText = findViewById(R.id.editSenderText);
         PasswordEmailText = findViewById(R.id.editPasswordText);
 
+        //ALUEDA DEBUG
+        Intent intentToMain = new Intent(getApplicationContext(), Inbox.class);
+        startActivity(intentToMain);
+
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -48,7 +52,7 @@ public class Log_In extends AppCompatActivity {
                     int result = mTTS.setLanguage(Locale.US);
 
                     //I skipped the log in part.
-                    ttsInitialized();
+                    //ttsInitialized();
 
                     if (result == TextToSpeech.LANG_MISSING_DATA|| result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "Language not supported");

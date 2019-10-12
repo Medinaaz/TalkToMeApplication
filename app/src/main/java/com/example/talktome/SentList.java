@@ -148,13 +148,13 @@ public class SentList extends AppCompatActivity {
                             if ((result.get(0)).contains("email")) {
                                 int email_index = 0;
 
-                                if(result.get(0).contains("two") || result.get(0).contains("2")) {
+                                if(result.get(0).contains("two") || result.get(0).contains("2") || result.get(0).contains("to")) {
                                     email_index = 1;
                                 }
-                                else if(result.get(0).contains("three") || result.get(0).contains("3")) {
+                                else if(result.get(0).contains("three") || result.get(0).contains("3") || result.get(0).contains("tree")) {
                                     email_index = 2;
                                 }
-                                else if(result.get(0).contains("four") || result.get(0).contains("4")) {
+                                else if(result.get(0).contains("four") || result.get(0).contains("4") || result.get(0).contains("for")) {
                                     email_index = 3;
                                 }
                                 else if(result.get(0).contains("five") || result.get(0).contains("5")) {
@@ -166,7 +166,7 @@ public class SentList extends AppCompatActivity {
                                 else if(result.get(0).contains("seven") || result.get(0).contains("7")) {
                                     email_index = 6;
                                 }
-                                else if(result.get(0).contains("eight") || result.get(0).contains("8")) {
+                                else if(result.get(0).contains("eight") || result.get(0).contains("8") || result.get(0).contains("ate")) {
                                     email_index = 7;
                                 }
                                 else if(result.get(0).contains("nine") || result.get(0).contains("9")) {
@@ -177,9 +177,7 @@ public class SentList extends AppCompatActivity {
                                 }
 
                                 //Read the required email
-                                emailSpeech = mailsList.get(email_index);
-
-                                mTTS.speak("Now reading email number " + email_index, TextToSpeech.QUEUE_FLUSH, null, "messageID3");
+                                emailSpeech = "Email " + Integer.toString(email_index + 1) + " is " + mailsList.get(email_index);
 
                                 HashMap<String, String> map = new HashMap<>();
                                 map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "messageID3");
