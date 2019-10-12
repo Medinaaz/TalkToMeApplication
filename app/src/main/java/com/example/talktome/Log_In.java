@@ -110,20 +110,59 @@ public class Log_In extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     switch (speechText) {
+                        case "Log in error. Please say your email and password again":
+                            String emailWithoutSpace2 = result.get(0).replace(" ","");
+                            SenderEmailEditText.setText(emailWithoutSpace2 + "@gmail.com");
+                            speechText = "Say your password";
+                            mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
+                            break;
                         case "Log in page is opened, say your email address":
-                            SenderEmailEditText.setText("yakuphanbilgic@gmail.com");
+                            String emailWithoutSpace = result.get(0).replace(" ","");
+                            SenderEmailEditText.setText(emailWithoutSpace + "@gmail.com");
                             speechText = "Say your password";
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
                         case "Say your password":
-                            PasswordEmailText.setText(result.get(0));
+                            String passwordWithoutSpace = result.get(0).replace(" ","");
+                            PasswordEmailText.setText(passwordWithoutSpace);
                             speechText = "Say login in order to log in to the app";
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
                         case "Say login in order to log in to the app":
-                            if(!result.get(0).equals("login") || !result.get(0).equals("log in")){
-                                Intent intentToLogIn = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intentToLogIn);
+                            if(result.get(0).equals("login") || result.get(0).equals("log in") || result.get(0).equals("logging") ){
+                                String[] params = {SenderEmailEditText.getText().toString(), PasswordEmailText.getText().toString()};
+                                LoginRequest loginRequest = new LoginRequest();
+
+                                String loginResult = "";
+                                JSONObject json = new JSONObject();
+
+                                try{
+                                    loginResult = loginRequest.execute(params).get();
+
+                                    if(loginRequest != null){
+                                        json = new JSONObject(loginResult);
+                                        String debug = json.get("success").toString();
+                                    }
+
+                                    if(loginRequest == null){
+                                        speechText = "Log in error. Please say your email and password again";
+                                        mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
+                                    }
+
+                                    if(loginRequest != null && json.get("success").toString().equals("true")){
+                                        Intent intentToMain = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intentToMain);
+                                    } else {
+                                        speechText = "Log in error. Please say your email and password again";
+                                        mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
+                                    }
+
+                                } catch (Exception e){
+                                    speechText = "Log in error. Please say your email and password again";
+                                    mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
+                                    e.printStackTrace();
+                                }
+
                                 break;
                             } else{
                                 Toast.makeText(this, "you couldn't say login, you said " + result.get(0),Toast.LENGTH_LONG).show();

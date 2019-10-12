@@ -104,7 +104,7 @@ public class Compose extends AppCompatActivity {
 
                     switch (speechText) {
                         case "Compose page is opened, say email address of the receiver":
-                            receiverEmailEditText.setText("yakuphanbilgic@gmail.com");
+                            receiverEmailEditText.setText("computerproject714@gmail.com");
                             speechText = "Say subject of the email";
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
