@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-public class Log_In extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private TextToSpeech mTTS;
     private String speechText;
@@ -41,18 +41,13 @@ public class Log_In extends AppCompatActivity {
         SenderEmailEditText = findViewById(R.id.editSenderText);
         PasswordEmailText = findViewById(R.id.editPasswordText);
 
-        //ALUEDA DEBUG
-        Intent intentToMain = new Intent(getApplicationContext(), Inbox.class);
-        startActivity(intentToMain);
-
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
                     int result = mTTS.setLanguage(Locale.US);
 
-                    //I skipped the log in part.
-                    //ttsInitialized();
+                    ttsInitialized();
 
                     if (result == TextToSpeech.LANG_MISSING_DATA|| result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "Language not supported");
@@ -116,19 +111,35 @@ public class Log_In extends AppCompatActivity {
                     switch (speechText) {
                         case "Log in error. Please say your email and password again":
                             String emailWithoutSpace2 = result.get(0).replace(" ","");
-                            SenderEmailEditText.setText(emailWithoutSpace2 + "@gmail.com");
+                            String emailWithoutSpace3 = emailWithoutSpace2.replace("one","1");
+                            String emailWithoutSpace4 = emailWithoutSpace3.replace("two","2");
+                            String emailWithoutSpace5 = emailWithoutSpace4.replace("three","3");
+                            String emailWithoutSpace6 = emailWithoutSpace5.replace("four","4");
+                            String emailWithoutSpace7 = emailWithoutSpace6.replace("five","5");
+
+                            SenderEmailEditText.setText(emailWithoutSpace7 + "@gmail.com");
                             speechText = "Say your password";
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
                         case "Log in page is opened, say your email address":
                             String emailWithoutSpace = result.get(0).replace(" ","");
-                            SenderEmailEditText.setText(emailWithoutSpace + "@gmail.com");
+                            String emailWithoutSpace8 = emailWithoutSpace.replace("one","1");
+                            String emailWithoutSpace9 = emailWithoutSpace8.replace("two","2");
+                            String emailWithoutSpace10 = emailWithoutSpace9.replace("three","3");
+                            String emailWithoutSpace11 = emailWithoutSpace10.replace("four","4");
+                            String emailWithoutSpace12 = emailWithoutSpace11.replace("five","5");
+
+                            SenderEmailEditText.setText(emailWithoutSpace12 + "@gmail.com");
                             speechText = "Say your password";
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
                         case "Say your password":
                             String passwordWithoutSpace = result.get(0).replace(" ","");
-                            PasswordEmailText.setText(passwordWithoutSpace);
+                            String passwordWithoutSpace2 = passwordWithoutSpace.replace("one","1");
+                            String passwordWithoutSpace3 = passwordWithoutSpace2.replace("two","2");
+
+
+                            PasswordEmailText.setText(passwordWithoutSpace3);
                             speechText = "Say login in order to log in to the app";
                             mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             break;
@@ -169,7 +180,9 @@ public class Log_In extends AppCompatActivity {
 
                                 break;
                             } else{
-                                Toast.makeText(this, "you couldn't say login, you said " + result.get(0),Toast.LENGTH_LONG).show();
+                                speechText = "Say login in order to log in to the app";
+
+                                mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID1");
                             }
                         default:
                             break;

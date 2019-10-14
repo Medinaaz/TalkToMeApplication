@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class Inbox extends AppCompatActivity {
+public class InboxActivity extends AppCompatActivity {
     private ListView sentEmails;
     private TextToSpeech mTTS;
     private String speechText;
@@ -105,7 +105,7 @@ public class Inbox extends AppCompatActivity {
             public void onError(String s) {}
         });
 
-        speechText = "Inbox is opened, say email and a number to read the email with that order and say go to go back";
+        speechText = "InboxActivity is opened, say email and a number to read the email with that order and say go to go back";
 
         HashMap<String, String> map = new HashMap<>();
         map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "messageID2");
@@ -141,7 +141,7 @@ public class Inbox extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     switch (speechText) {
-                        case "Inbox is opened, say email and a number to read the email with that order and say go to go back":
+                        case "InboxActivity is opened, say email and a number to read the email with that order and say go to go back":
                             if (result.get(0).equals("back")) {
                                 Intent intentToMain = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intentToMain);
@@ -149,8 +149,6 @@ public class Inbox extends AppCompatActivity {
 
                             if (result.get(0).equals("exit")) {
                                 finishAndRemoveTask();
-                                /* OR-->getActivity().finish();
-                                  System.exit(0);*/
                             }
 
                             if ((result.get(0)).contains("email")) {
@@ -191,6 +189,12 @@ public class Inbox extends AppCompatActivity {
                                 map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "messageID3");
 
                                 mTTS.speak(emailSpeech, TextToSpeech.QUEUE_FLUSH, null, "messageID3");
+                            }
+
+                            else {
+                                speechText = "InboxActivity is opened, say email and a number to read the email with that order and say go to go back";
+
+                                mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID2");
                             }
                     }
                 }

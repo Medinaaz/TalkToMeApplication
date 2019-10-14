@@ -141,8 +141,6 @@ public class SentList extends AppCompatActivity {
 
                             if (result.get(0).equals("exit")) {
                                 finishAndRemoveTask();
-                                /* OR-->getActivity().finish();
-                                  System.exit(0);*/
                             }
 
                             if ((result.get(0)).contains("email")) {
@@ -179,10 +177,12 @@ public class SentList extends AppCompatActivity {
                                 //Read the required email
                                 emailSpeech = "Email " + Integer.toString(email_index + 1) + " is " + mailsList.get(email_index);
 
-                                HashMap<String, String> map = new HashMap<>();
-                                map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "messageID3");
-
                                 mTTS.speak(emailSpeech, TextToSpeech.QUEUE_FLUSH, null, "messageID3");
+                            }
+                            else {
+                                speechText = "Sent emails list is opened, say email and a number to read the email with that order and say go to go back";
+
+                                mTTS.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "messageID2");
                             }
                     }
                 }

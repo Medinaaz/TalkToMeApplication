@@ -93,18 +93,27 @@ public class MainActivity extends AppCompatActivity {
                 //get text array from voice intent
                 if (resultCode == RESULT_OK && null != data){
                     ArrayList<String> result= data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    Intent intentToSent = new Intent(getApplicationContext(), SentList.class);
 
                     switch(result.get(0)){
                         case "inbox":
-                            Intent intentToInbox = new Intent(getApplicationContext(), Inbox.class);
+                            Intent intentToInbox = new Intent(getApplicationContext(), InboxActivity.class);
                             startActivity(intentToInbox);
                             break;
                         case "sent email":
-                            Intent intentToSent = new Intent(getApplicationContext(), SentList.class);
+                            startActivity(intentToSent);
+                            break;
+                        case "send email":
+                            startActivity(intentToSent);
+                            break;
+                        case "send emails":
+                            startActivity(intentToSent);
+                            break;
+                        case "sent emails":
                             startActivity(intentToSent);
                             break;
                         case "compose an email":
-                            Intent intentToCompose = new Intent(getApplicationContext(), Compose.class);
+                            Intent intentToCompose = new Intent(getApplicationContext(), ComposeActivity.class);
                             startActivity(intentToCompose);
                             break;
                         case "exit":
